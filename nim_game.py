@@ -11,7 +11,6 @@ class MainGame():
         self.input_choice = None
         #*Keeps track of the previous numbers
         self.total = 0
-        self.last_choice = 0
         self.current_choice = 0
 
         #*When printing out the results, I can use general variables.
@@ -23,23 +22,31 @@ class MainGame():
 
         #*Rather than making the move based on  the past move, I should try to get it close to the win_number_list
         self.win_number_list = []
+        for i in range(self.ending_win_number, 0, -1 * self.follow_increment):
+            self.win_number_list.append(i)
+        self.win_number_list = sorted(self.win_number_list)
+        print(self.win_number_list)
         
 
     def gotoplayerturn(self):
         if self.players == '0':
             #*I will add a function here
+            self.no_input_player = "The computer"
             self.no_input_header = "\nThe computer's turn:"
             self.no_input_choice = "The computer chooses: "
             self.no_input_lose = "The computer loses."
+            self.input_player = "You"
             self.input_header = "\nYour turn:"
             self.input_choice = "You choose: "
             self.input_lose = "You lose."
 
         
         elif self.players == '1':
+            self.no_input_player = "You"
             self.no_input_header = "\nYour turn: "
             self.no_input_choice = "You (should) choose: "
             self.no_input_lose = "You lose."
+            self.input_player = "Your friend"
             self.input_header = "\nYour friend's turn: "
             self.input_choice = "What did your friend choose?: "
             self.input_lose = "Your friend loses."
@@ -54,29 +61,23 @@ class MainGame():
         #*This function os for the characters without inputs (computer, you advice)
         print(self.no_input_header)
         print(f"\nCurrent total: {self.total}")
-        if self.starting_win_number > self.total:
-            self.current_choice = self.starting_win_number
-            print(f"{self.no_input_choice} {self.current_choice}\n")
-            self.total += self.current_choice
-            self.last_choice = self.current_choice
-            #self.input_character()
 
-        elif self.starting_win_number < self.total:
-            self.current_choice = self.follow_increment - self.last_choice
+        if self.total not in self.win_number_list:
+            for i in self.win_number_list:
+                if i > self.current_choice and  i - self.total <= self.increment:
+                    self.current_choice = i - self.total
             print(f"{self.no_input_choice} {self.current_choice}\n")
             self.total += self.current_choice
-            self.last_choice = self.current_choice
-            #self.input_character()
         
         #*Just in case the player knows the strategy and there is no hope to win.
         #*I will pick a random int
-        elif self.starting_win_number == self.total:
+        elif self.total in self.win_number_list:
             self.current_choice = random.randint(1, self.increment)
             print(f"{self.no_input_choice} {self.current_choice}\n")
             self.total += self.current_choice
-            self.last_choice = self.current_choice
         
-        if self.total >= 30:
+        if self.total >= self.reaching_number:
+            print(f"{self.no_input_player} reached {self.reaching_number}.")
             print(self.no_input_lose)
         else:
             self.input_character()
@@ -87,7 +88,8 @@ class MainGame():
         while not_valid:
             print(self.input_header)
             print(f"\nCurrent total: {self.total}")
-            self.input_num = input(f"Pick the increment (max:{self.increment}): ")
+            print(f"Pick the increment (max:{self.increment})")
+            self.input_num = input(f"{self.input_choice}")
             try:
                 self.input_num = int(self.input_num)
                 if not 1 <= self.input_num <= self.increment:
@@ -95,10 +97,14 @@ class MainGame():
                 else:
                     print(f"{self.input_choice} {self.input_num}\n")
                     self.total += self.input_num
-                    self.last_choice = self.input_num
-                    self.last_choice = self.input_num
+                    self.current_choice = self.input_num
+                    self.current_choice = self.input_num
                     not_valid = False
-                    self.no_input_character()
+                    if self.total >= self.reaching_number:
+                        print(f"{self.input_player} reached {self.reaching_number}.")
+                        print(self.input_lose)
+                    else:
+                        self.no_input_character()
             except ValueError:
                 print("Enter valid command or integer.")
                 not_valid = True
