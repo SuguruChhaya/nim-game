@@ -25,7 +25,6 @@ class MainGame():
         for i in range(self.ending_win_number, 0, -1 * self.follow_increment):
             self.win_number_list.append(i)
         self.win_number_list = sorted(self.win_number_list)
-        print(self.win_number_list)
         
 
     def gotoplayerturn(self):
@@ -95,7 +94,6 @@ class MainGame():
                 if not 1 <= self.input_num <= self.increment:
                     raise(ValueError)
                 else:
-                    print(f"{self.input_choice} {self.input_num}\n")
                     self.total += self.input_num
                     self.current_choice = self.input_num
                     self.current_choice = self.input_num
