@@ -13,8 +13,6 @@ class MainGame():
         self.total = 0
         self.current_choice = 0
 
-        #*When printing out the results, I can use general variables.
-        
         #*Finding the reaching_number - 1 number 
         self.ending_win_number = self.reaching_number - 1
         self.follow_increment = self.increment + 1
@@ -29,7 +27,6 @@ class MainGame():
 
     def gotoplayerturn(self):
         if self.players == '0':
-            #*I will add a function here
             self.no_input_player = "The computer"
             self.no_input_header = "\nThe computer's turn:"
             self.no_input_choice = "The computer chooses: "
@@ -68,7 +65,7 @@ class MainGame():
             print(f"{self.no_input_choice} {self.current_choice}\n")
             self.total += self.current_choice
         
-        #*Just in case the player knows the strategy and there is no hope to win.
+        #*Just in case the player knows the strategy and there is no hope to win,
         #*I will pick a random int
         elif self.total in self.win_number_list:
             self.current_choice = random.randint(1, self.increment)
