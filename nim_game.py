@@ -1,14 +1,12 @@
 import random
+'''
+Not to create objects but just to manage the methods. 
+'''
 class MainGame():
-    def __init__(self, reaching_number, increment, players, goesfirst):
+    def __init__(self, reaching_number, increment, goesfirst):
         self.reaching_number = reaching_number
         self.increment = increment
-        self.players = players
         self.goesfirst = goesfirst
-        self.no_input_header = None
-        self.no_input_choice = None
-        self.input_header = None
-        self.input_choice = None
         #*Keeps track of the previous numbers
         self.total = 0
         self.current_choice = 0
@@ -16,36 +14,24 @@ class MainGame():
         #*Finding the reaching_number - 1 number 
         self.ending_win_number = self.reaching_number - 1
         self.follow_increment = self.increment + 1
-        self.starting_win_number = self.ending_win_number % self.follow_increment
 
         #*Rather than making the move based on  the past move, I should try to get it close to the win_number_list
         self.win_number_list = []
         for i in range(self.ending_win_number, 0, -1 * self.follow_increment):
             self.win_number_list.append(i)
         self.win_number_list = sorted(self.win_number_list)
-        
+    
+        self.no_input_player = "The computer"
+        self.no_input_header = "\nThe computer's turn:"
+        self.no_input_choice = "The computer chooses: "
+        self.no_input_lose = "The computer loses."
+        self.input_player = "You"
+        self.input_header = "\nYour turn:"
+        self.input_choice = "You choose: "
+        self.input_lose = "You lose."
 
     def gotoplayerturn(self):
-        if self.players == '0':
-            self.no_input_player = "The computer"
-            self.no_input_header = "\nThe computer's turn:"
-            self.no_input_choice = "The computer chooses: "
-            self.no_input_lose = "The computer loses."
-            self.input_player = "You"
-            self.input_header = "\nYour turn:"
-            self.input_choice = "You choose: "
-            self.input_lose = "You lose."
 
-        
-        elif self.players == '1':
-            self.no_input_player = "You"
-            self.no_input_header = "\nYour turn: "
-            self.no_input_choice = "You (should) choose: "
-            self.no_input_lose = "You lose."
-            self.input_player = "Your friend"
-            self.input_header = "\nYour friend's turn: "
-            self.input_choice = "What did your friend choose?: "
-            self.input_lose = "Your friend loses."
 
         if self.goesfirst == '0':
             self.no_input_character()
@@ -108,29 +94,27 @@ class MainGame():
 print("\nWelcome to the nim game! \nYou will count from 1 to the reaching number. \nYou will choose the max increment and the reaching number.\nSince the computer will perform the best possible moves to win, you can use this program to beat your friends!")
 not_valid = True
 while not_valid:
-    print("\nThe reaching number has to be between 20 and 100 (inclusive).")
-    reaching_number_str = input("Enter reaching number: ")
-    print("\nThe max increment has to be between 3 and 10 (inclusive).")
-    incement_str = input("Enter max increment: ")
-    players = input("Enter '0' if you are playing against the computer.\nEnter '1' if you want to beat a friend. (You will input your friend's move into the game).\n>")
-
 
     try:
+        print("\nThe reaching number has to be between 20 and 100 (inclusive).")
+        reaching_number_str = input("Enter reaching number: ")
+        print("\nThe max increment has to be between 3 and 10 (inclusive).")
+        incement_str = input("Enter max increment: ")
         reaching_number = int(reaching_number_str)
         increment = int(incement_str)
         not_valid = False
-        if (not 20 <= reaching_number <= 100) or (not 3 <= increment <= 10) or (players not in ['0', '1']):
+        if (not 20 <= reaching_number <= 100) or (not 3 <= increment <= 10):
             raise(ValueError)
         else:
-            if players == '0':
-                zero_player = "The computer"
-                one_player = "You"
-            else:
-                zero_player = "You (receive advice)"
-                one_player = "Your friend"
+
+            zero_player = "The computer"
+            one_player = "You"
             goesfirst = input(f"Who goes first: 0({zero_player}) or 1({one_player})>")
-            game = MainGame(reaching_number, increment, players, goesfirst)
-            game.gotoplayerturn()
+            if goesfirst in ['1', '2']:
+                game = MainGame(reaching_number, increment, goesfirst)
+                game.gotoplayerturn()
+            else:
+                raise (ValueError)
         
 
 
